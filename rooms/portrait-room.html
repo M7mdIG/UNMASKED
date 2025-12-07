@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>UNMASKED - Portrait Room</title>
+
+    <!-- Fade + Global styling -->
+    <link rel="stylesheet" href="../css/transitions.css" />
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/portrait.css" />
+
+    <!-- Fade logic -->
+    <script src="../js/transitions.js" defer></script>
+    <script src="../js/portrait.js" defer></script>
+  </head>
+
+  <body>
+    <!-- Fade overlay (starts active, fades out on load) -->
+    <div id="fade-overlay" class="active"></div>
+    <div id="portrait-layer"></div>
+    <button id="arrow-left" class="arrow-btn">◀</button>
+    <button id="arrow-right" class="arrow-btn">▶</button>
+
+    <!-- AI OVERLAY -->
+    <div id="ai-overlay">
+      <div id="ai-container">
+        <img id="ai-img" src="../assets/AI.svg" />
+      </div>
+
+      <div id="ai-text-block">
+        <p id="ai-text"></p>
+        <div id="ai-buttons"></div>
+      </div>
+    </div>
+
+    <script>
+      // Same fade-in behavior as lobby
+      window.onload = () => {
+        document.getElementById("fade-overlay").classList.remove("active");
+      };
+    </script>
+  </body>
+</html>

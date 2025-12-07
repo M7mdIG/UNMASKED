@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>UNMASKED - Lobby</title>
+
+    <!-- Global + Lobby-specific styles -->
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/lobby.css" />
+    <link rel="stylesheet" href="css/transitions.css" />
+
+    <!-- Transition Logic -->
+    <script src="js/transitions.js" defer></script>
+    <script src="js/lobby.js" defer></script>
+  </head>
+
+  <body>
+    <!-- Fade overlay for transitions -->
+    <div id="fade-overlay" class="active"></div>
+
+    <main class="lobby-container">
+      <h1 class="title">UNMASKED</h1>
+      <h2 class="subtitle">Choose your path</h2>
+
+      <div class="portals">
+        <div class="portal" onclick="fadeTo('rooms/portrait-room.html')">
+          <div class="portal-inner">
+            <h3>Portrait Room</h3>
+            <p>Explore shifting identities</p>
+          </div>
+        </div>
+
+        <div class="portal" onclick="fadeTo('rooms/surveillance-room.html')">
+          <div class="portal-inner">
+            <h3>Surveillance Room</h3>
+            <p>See who is watching</p>
+          </div>
+        </div>
+
+        <div class="portal" onclick="fadeTo('rooms/casino-room.html')">
+          <div class="portal-inner">
+            <h3>Global Casino</h3>
+            <p>Try your luck</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,851 @@
+body {
+  margin: 0;
+  background: black;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+/* Background holder */
+#surveillance-bg {
+  width: 100vw;
+  height: 100vh;
+  background: url("../assets/surveillance/background.png") center center
+    no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+/* Invisible clickable hotspot */
+#terminal-hitbox {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+#page-subtitle {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: sans-serif;
+  font-size: 23px;
+  color: rgba(255, 255, 255, 0.75);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1s ease;
+  white-space: pre-wrap;
+  z-index: 1000;
+  transition: opacity 1s ease, bottom 1s ease;
+}
+
+/* ---------------------------------------------------------
+   EYES
+--------------------------------------------------------- */
+
+.eye {
+  width: 40px;
+  height: 20px;
+  background: white;
+
+  clip-path: polygon(
+    50% 0%,
+    90% 25%,
+    100% 50%,
+    90% 75%,
+    50% 100%,
+    10% 75%,
+    0% 50%,
+    10% 25%
+  );
+
+  position: absolute;
+
+  /* NEW: enable blinking via vertical scale */
+  transform-origin: center center;
+  transition: transform 0.15s ease;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+.eye-pair {
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  /* NEW: enable blinking via vertical scale */
+  transform-origin: center center;
+  transition: transform 0.15s ease;
+}
+
+.eye:first-child {
+  left: -25px;
+}
+.eye:last-child {
+  left: 25px;
+}
+
+.pupil {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgb(0, 0, 0);
+  border-radius: 2px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ---------------------------------------------------------
+   BLINK STATES (scaleY instead of clip-path)
+--------------------------------------------------------- */
+
+/* Half blink (optional, looks nice) */
+.eye-pair.blink {
+  transform: scaleY(0.35);
+}
+
+/* Fully closed */
+.eye-pair.blink-closed {
+  transform: scaleY(0.05);
+}
+
+/* ---------------------------------------------------------
+   COMPUTER SCREEN OVERLAY (Styled like Portrait Room UI)
+--------------------------------------------------------- */
+
+#computer-screen-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+  z-index: 500;
+}
+
+#computer-screen-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Terminal window */
+#computer-screen {
+  height: 70%;
+  aspect-ratio: 16 / 9;
+  background: #0c0c0c;
+  border-radius: 24px;
+  position: relative;
+  font-family: monospace;
+  color: white;
+  overflow: clip;
+
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3),
+    0 0 40px rgba(255, 255, 255, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.15);
+  transition: box-shadow 0.1s ease;
+}
+
+/* RED GLOW WARNING STATE */
+#computer-screen.red-glow {
+  border: 1px solid red;
+  animation: redPulse 2s infinite alternate ease-in-out;
+}
+
+@keyframes redPulse {
+  0% {
+    box-shadow: 0 0 25px rgba(255, 0, 0, 0.3),
+      0 0 40px rgba(255, 0, 0, 0.1) inset;
+  }
+  100% {
+    box-shadow: 0 0 35px rgba(255, 0, 0, 0.6),
+      0 0 60px rgba(255, 0, 0, 0.3) inset;
+  }
+}
+
+/* Close button */
+#close-screen {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 40px;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: monospace;
+  color: white;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+#close-screen:hover {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.9);
+  transform: scale(1.15);
+}
+
+#screen-content {
+  width: 100%;
+  height: 100%;
+  padding-top: 50px;
+  font-size: 18px;
+  color: white;
+}
+
+/* ---------------------------------------------------------
+   LOGIN PAGE
+--------------------------------------------------------- */
+
+.screen-page {
+  display: none;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  padding-top: 80px;
+  color: white;
+  font-family: monospace;
+}
+
+.screen-page.active {
+  display: flex;
+  align-content: center;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+}
+
+#login-page {
+  background: url("../assets/surveillance/screen_background.png") center center
+    no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+}
+
+#login-page h2 {
+  font-size: 26px;
+  margin-bottom: 30px;
+}
+
+#login-input {
+  width: 60%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  background: #111;
+  color: white;
+  text-align: center;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+#login-submit {
+  padding: 10px 30px;
+  font-size: 18px;
+  border-radius: 1000px;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+#login-submit:hover {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+/* ---------------------------------------------------------
+   LOADING PAGE STYLES
+--------------------------------------------------------- */
+
+#loading-page {
+  background: url("../assets/surveillance/screen_background.png") center center
+    no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+}
+
+#loading-lines {
+  text-align: center;
+  font-family: monospace;
+}
+
+.load-line {
+  opacity: 0;
+  font-size: 20px;
+  margin: 12px 0;
+  color: rgb(220, 220, 220);
+  transition: opacity 0.5s ease;
+}
+
+/* ---------------------------------------------------------
+   DESKTOP PAGE
+--------------------------------------------------------- */
+
+#desktop-page {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  position: relative;
+  font-family: monospace;
+  color: white;
+  justify-content: normal;
+}
+
+#desktop-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("../assets/surveillance/desktop_bg.jpeg") center center
+    no-repeat;
+  background-size: cover;
+  filter: saturate(0.5); /* ONLY background desaturated */
+  z-index: 0;
+}
+
+#desktop-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* STATUS BAR */
+#status-bar {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+
+  background: rgba(20, 20, 20, 0.35);
+  backdrop-filter: blur(15px) saturate(0.5);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 18px;
+
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.06) inset;
+  font-size: 14px;
+}
+
+/* Center app icon */
+#status-app-icon {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 26px;
+  opacity: 0.7;
+  filter: none;
+}
+
+/* ---------------------------------------------------------
+   EMAIL WINDOW (FULL FIXED VERSION)
+--------------------------------------------------------- */
+
+#email-window {
+  transform: translateY(3000px) scale(0);
+  width: 80%;
+  height: 70%;
+  background: #111;
+  border-radius: 12px;
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.1);
+  margin: 40px auto 0;
+  overflow: clip;
+
+  /* Correct layout: titlebar on top, content below */
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.8s ease;
+}
+
+/* Inner wrapper (SIDEBAR + MAIN) */
+#email-inner {
+  width: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  height: calc(100% - 38px); /* subtract titlebar height */
+}
+
+/* ---------------------------------------------------------
+   TITLEBAR
+--------------------------------------------------------- */
+
+#email-titlebar {
+  width: 100%;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  font-family: monospace;
+  color: white;
+}
+
+/* LEFT: ICON + APP NAME */
+#email-title-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#email-app-icon {
+  width: 16px;
+  height: 16px;
+  background: url("../assets/surveillance/mail_icon.svg") center center
+    no-repeat;
+  background-size: contain;
+}
+
+#email-app-name {
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+/* RIGHT: WINDOW BUTTONS */
+#email-title-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title-btn {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  color: white;
+  transition: 0.2s ease;
+}
+
+.title-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+}
+
+/* Close button hover (red) */
+#email-close:hover {
+  background: rgba(255, 0, 0, 0.4);
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.9);
+}
+
+/* ---------------------------------------------------------
+   SIDEBAR
+--------------------------------------------------------- */
+
+#email-sidebar {
+  width: 22%;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-item {
+  font-family: monospace;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 14px 22px;
+  cursor: pointer;
+  transition: 0.2s;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sidebar-item span {
+  opacity: 0.6;
+}
+
+.sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-item.active {
+  background: rgba(255, 255, 255, 0.15);
+  font-weight: bold;
+}
+
+/* ---------------------------------------------------------
+   MAIN EMAIL AREA
+--------------------------------------------------------- */
+
+#email-main {
+  width: 78%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HEADER (To: field) */
+#email-header {
+  background: rgba(255, 255, 255, 0.07);
+  padding: 14px 20px;
+  font-size: 16px;
+  font-family: monospace;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#email-header label {
+  color: white;
+}
+
+#email-to {
+  flex-grow: 1;
+  padding: 8px;
+  background: #000;
+  border: 1px solid #444;
+  color: white;
+  border-radius: 6px;
+  font-family: monospace;
+}
+
+/* BODY + TEXTAREA */
+#email-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#email-input {
+  width: 100%;
+  flex-grow: 1;
+  background: black;
+  color: white;
+  border: 1px solid #444;
+  outline: none;
+  resize: none;
+  font-family: monospace;
+  font-size: 16px;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+#textarea-mirror {
+  position: absolute;
+  visibility: hidden;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  pointer-events: none;
+  z-index: -1;
+
+  font-family: monospace;
+  font-size: 16px;
+  line-height: 1.3;
+  padding: 12px;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+}
+
+/* SEND BUTTON */
+#email-send {
+  margin-top: 12px;
+  padding: 10px 20px;
+  background: #333;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: monospace;
+  transition: 0.2s;
+}
+
+#email-send:hover {
+  background: #555;
+}
+
+/* FLYING LETTERS */
+#letter-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.flying-letter {
+  position: fixed !important;
+  z-index: 1000;
+  font-family: monospace;
+  color: white;
+  opacity: 0;
+  font-size: 16px;
+  transition: left 0.8s ease, top 0.8s ease, opacity 0.1s ease, color 0.8s ease,
+    font-size 0.8s ease;
+}
+
+/* NOTIFICATIONS */
+#notification-area {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.notification {
+  background: rgba(20, 20, 20, 0.45);
+  backdrop-filter: blur(6px);
+  padding: 12px 18px;
+  border-radius: 12px;
+  margin-top: 14px;
+
+  opacity: 0;
+  transform: translateY(20px);
+  animation: notifyIn 0.5s forwards ease-out;
+}
+
+@keyframes notifyIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* FLOATING DESKTOP MASCOT (OUTSIDE SCREEN) */
+/* FLOATING MASCOT (GLOBAL) */
+#desktop-mascot-floating {
+  position: absolute;
+  top: 30px; /* offscreen start */
+  left: -200px; /* offscreen start */
+  transform: translateX(-50%);
+  opacity: 0;
+
+  transition: bottom 0.8s ease, left 0.8s ease, transform 0.8s ease,
+    opacity 0.6s ease, filter 0.8s ease;
+
+  z-index: 1200;
+  display: flex;
+  align-content: center;
+  flex-wrap: wrap;
+}
+
+/* Mascot Image */
+#desktop-mascot-floating img {
+  width: 110px;
+  transition: src 1s ease;
+}
+
+/* Default dialogue */
+#desktop-mascot-floating-text {
+  font-size: 22px;
+  font-family: monospace;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s ease;
+  white-space: pre-wrap;
+  align-content: center;
+}
+
+/* Move to upper-left corner */
+.mascot-top-left {
+  bottom: unset !important;
+  top: 25px !important;
+  left: 25px !important;
+}
+
+/* ---------------------------------------------------------
+   ULTRA STYLED SAD KPI DASHBOARD
+--------------------------------------------------------- */
+
+#dashboard-page {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at top,
+    #220000 0 percent,
+    #000000 70 percent
+  );
+  color: white;
+  font-family: monospace;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+#dashboard-page.active {
+  display: flex;
+  opacity: 1;
+}
+
+/* Container */
+#dash-container {
+  width: 82%;
+  max-width: 1400px;
+  text-align: center;
+  animation: dashFadeIn 1.2s ease forwards;
+  opacity: 0;
+}
+
+@keyframes dashFadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+/* USER HEADER */
+#dash-identity {
+  margin-bottom: 35px;
+  animation: slightFloat 4s ease-in-out infinite alternate;
+}
+
+#dash-username {
+  font-size: 40px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #ff4444;
+  text-shadow: 0 0 18px rgba(255, 70, 70, 0.7);
+}
+
+#dash-identity-sub {
+  opacity: 0.6;
+  margin-top: -10px;
+  font-size: 16px;
+}
+
+/* KPI GRID */
+#dash-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+/* KPI CARD BASE */
+.kpi-card,
+.kpi-wide {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: left;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.kpi-title {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+}
+
+.kpi-value {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.kpi-value.small {
+  font-size: 17px;
+}
+
+.kpi-value.large {
+  font-size: 32px;
+}
+
+.kpi-value.red {
+  color: #ff4444;
+  text-shadow: 0 0 12px rgba(255, 80, 80, 0.4);
+}
+
+.kpi-subtext {
+  opacity: 0.5;
+  font-size: 13px;
+}
+
+.kpi-subtext.red {
+  color: #ff4444;
+  opacity: 0.9;
+}
+
+/* KPI ICON */
+.kpi-icon {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 20px;
+}
+
+.kpi-icon.red {
+  color: red;
+  text-shadow: 0 0 10px red;
+}
+
+/* KPI PROGRESS BARS */
+.kpi-bar {
+  height: 10px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.kpi-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #ff5555, #aa0000);
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.5);
+  transition: width 1.4s ease;
+}
+
+.kpi-bar.danger span {
+  background: linear-gradient(90deg, #ff2222, #660000);
+}
+
+/* WIDE CARD */
+.kpi-wide {
+  grid-column: span 2;
+  text-align: center;
+}
+
+/* FINAL WARNING */
+#dash-final-warning {
+  margin-top: 35px;
+  font-size: 22px;
+  color: #ff2222;
+  text-shadow: 0 0 14px red;
+  animation: pulseWarning 1.4s ease-in-out infinite;
+}
+
+@keyframes pulseWarning {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}
+
+/* Idle floating animation */
+@keyframes slightFloat {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-6px);
+  }
+}

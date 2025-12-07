@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>UNMASKED - Surveillance Room</title>
+
+    <link rel="stylesheet" href="../css/transitions.css" />
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/surveillance.css" />
+
+    <script src="../js/transitions.js" defer></script>
+    <script src="../js/surveillance.js" defer></script>
+  </head>
+
+  <body>
+    <!-- Fade overlay -->
+    <div id="fade-overlay" class="active"></div>
+
+    <!-- Background Holder -->
+    <div id="surveillance-bg">
+      <div id="terminal-hitbox"></div>
+      <div id="eyes-layer"></div>
+    </div>
+
+    <!-- Overlay Computer Screen -->
+    <div id="computer-screen-overlay">
+      <div id="computer-screen">
+        <!-- LOGIN PAGE -->
+        <div id="login-page" class="screen-page active">
+          <h2>SECURE TERMINAL ACCESS</h2>
+          <div>
+            <label>Enter Username:</label>
+            <input type="text" id="login-input" maxlength="20" autofocus />
+          </div>
+          <button id="login-submit">Login</button>
+        </div>
+
+        <!-- LOADING PAGE -->
+        <div id="loading-page" class="screen-page">
+          <div id="loading-lines">
+            <p class="load-line">Initializing environment...</p>
+            <p class="load-line">Syncing behavioral logs...</p>
+            <p class="load-line">Preparing productivity workspace...</p>
+            <p class="load-line">Verifying biometric pattern...</p>
+          </div>
+        </div>
+
+        <!-- DESKTOP PAGE -->
+        <div id="desktop-page" class="screen-page">
+          <!-- STATUS BAR -->
+          <div id="status-bar">
+            <img
+              id="status-app-icon"
+              src="../assets/surveillance/mail_icon.svg"
+            />
+            <span id="status-user"></span>
+            <span id="status-time"></span>
+          </div>
+
+          <!-- EMAIL WINDOW -->
+          <div id="email-window">
+            <!-- TITLEBAR -->
+            <div id="email-titlebar">
+              <div id="email-title-left">
+                <div id="email-app-icon"></div>
+                <span id="email-app-name">Gmail</span>
+              </div>
+
+              <div id="email-title-buttons">
+                <div class="title-btn" id="email-minimize">–</div>
+                <div class="title-btn" id="email-close">×</div>
+              </div>
+            </div>
+
+            <!-- INNER FLEX ROW (SIDEBAR + MAIN) -->
+            <div id="email-inner">
+              <!-- SIDEBAR -->
+              <div id="email-sidebar">
+                <div class="sidebar-item active">Inbox <span>(2342)</span></div>
+                <div class="sidebar-item">Sent</div>
+                <div class="sidebar-item">Drafts <span>(163)</span></div>
+                <div class="sidebar-item">Flagged</div>
+                <div class="sidebar-item">Trash</div>
+              </div>
+
+              <!-- MAIN EMAIL AREA -->
+              <div id="email-main">
+                <div id="email-header">
+                  <label>To:</label>
+                  <input
+                    type="text"
+                    id="email-to"
+                    placeholder="recipient@example.com"
+                    readonly
+                  />
+                </div>
+
+                <div id="email-body">
+                  <textarea
+                    id="email-input"
+                    placeholder="Type your message..."
+                  ></textarea>
+                  <button id="email-send">Send</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FLYING LETTERS LAYER -->
+          <div id="letter-layer"></div>
+
+          <!-- NOTIFICATIONS -->
+          <div id="notification-area"></div>
+        </div>
+
+        <!-- DASHBOARD PAGE -->
+        <!-- DASHBOARD PAGE -->
+        <div id="dashboard-page" class="screen-page">
+          <div id="dash-container">
+            <!-- USER HEADER -->
+            <div id="dash-identity">
+              <h1 id="dash-username"></h1>
+              <p id="dash-identity-sub">Employee Performance Summary</p>
+            </div>
+
+            <!-- KPI GRID -->
+            <div id="dash-kpi-grid">
+              <div class="kpi-card">
+                <div class="kpi-title">Productivity Score</div>
+                <div class="kpi-value" id="kpi-productivity">32 percent</div>
+                <div class="kpi-bar">
+                  <span style="width: 32 percent"></span>
+                </div>
+              </div>
+
+              <div class="kpi-card">
+                <div class="kpi-title">Behavior Rating</div>
+                <div class="kpi-value" id="kpi-behavior">Non-Compliant</div>
+                <div class="kpi-icon red">!</div>
+              </div>
+
+              <div class="kpi-card">
+                <div class="kpi-title">Sentiment Analysis</div>
+                <div class="kpi-value small" id="kpi-sentiment">
+                  Fatigue, Distraction
+                </div>
+                <div class="kpi-subtext">Detected by emotion model v5.2</div>
+              </div>
+
+              <div class="kpi-card">
+                <div class="kpi-title">Violation Log</div>
+                <div class="kpi-value small" id="kpi-violations">
+                  Protocol 3.3.0.1 Breach
+                </div>
+                <div class="kpi-subtext red">High Priority</div>
+              </div>
+
+              <div class="kpi-wide">
+                <div class="kpi-title">Risk Assessment</div>
+                <div class="kpi-value large red" id="kpi-risk">HIGH RISK</div>
+                <div class="kpi-bar danger">
+                  <span style="width: 78 percent"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- FINAL WARNING -->
+            <div id="dash-final-warning">
+              Corrective Action Required Immediately
+            </div>
+          </div>
+        </div>
+
+        <button id="close-screen">X</button>
+      </div>
+    </div>
+
+    <div id="page-subtitle"></div>
+
+    <!-- FLOATING DESKTOP MASCOT (OUTSIDE SCREEN) -->
+    <div id="desktop-mascot-floating">
+      <img id="desktop-mascot-floating-img" src="../assets/AI.svg" />
+      <p id="desktop-mascot-floating-text"></p>
+    </div>
+    <div id="textarea-mirror"></div>
+
+    <script>
+      window.onload = () => {
+        document.getElementById("fade-overlay").classList.remove("active");
+      };
+    </script>
+  </body>
+</html>

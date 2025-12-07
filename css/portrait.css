@@ -1,0 +1,222 @@
+body {
+  margin: 0;
+  background: url("../assets/portraits/background.png") no-repeat center center
+    fixed;
+  background-size: cover;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+.portrait {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* JS will apply transform here */
+  transform: translate(-50%, -50%);
+
+  width: 450px;
+  aspect-ratio: 1596.6 / 2069.1;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  pointer-events: none;
+  filter: brightness(-100%);
+  transition: transform 1s ease, filter 1s ease, opacity 1s ease;
+}
+
+/* NEW inner wrapper that sways */
+.sway-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-origin: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: portrait-sway 10s ease-in-out infinite;
+}
+
+.portrait.visible {
+  filter: brightness(0);
+}
+
+.portrait-content {
+  position: absolute;
+  width: 65%;
+  height: auto;
+  object-fit: contain;
+  z-index: 1;
+}
+
+.portrait-frame {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  z-index: 2;
+}
+
+/* Sway remains the same BUT no translate in it */
+@keyframes portrait-sway {
+  0% {
+    transform: rotate(-5deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+  100% {
+    transform: rotate(-5deg);
+  }
+}
+
+/* Arrow buttons */
+.arrow-btn {
+  position: fixed;
+  height: 100%;
+  padding: 18px;
+  font-size: 30px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  z-index: 150;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.arrow-btn:hover {
+  transform: scale(1.35);
+}
+
+#arrow-left {
+  left: 20px;
+}
+
+#arrow-right {
+  right: 20px;
+}
+
+/* ---------------------------------------------------------
+   AI OVERLAY SYSTEM
+--------------------------------------------------------- */
+
+#ai-overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  opacity: 0;
+  pointer-events: none;
+
+  /* Darker background + fade */
+  transition: background 1s ease, opacity 1s ease;
+  z-index: 500;
+}
+
+/* AI container flies upward + grows from scale 0 */
+#ai-container {
+  position: absolute;
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%) scale(0); /* Start tiny */
+  transition: top 1.2s ease, opacity 1s ease, transform 1.2s ease;
+  opacity: 0;
+}
+
+/* AI portrait styling + pulsating/jitter animation */
+#ai-img {
+  width: 220px;
+  height: auto;
+  z-index: -50;
+
+  animation: aiPulse 3s infinite ease-in-out;
+}
+
+/* Pulsating + jitter animation */
+@keyframes aiPulse {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.05);
+  }
+  45% {
+    transform: scale(1.07) translateX(1px); /* slight jitter */
+  }
+  50% {
+    transform: scale(1.1) translateX(-1px);
+  }
+  55% {
+    transform: scale(1.07);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Text + buttons block */
+#ai-text-block {
+  position: absolute;
+  top: 45%;
+  width: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+
+  opacity: 0;
+  transition: opacity 0.8s ease;
+
+  font-family: monospace; /* Requested font */
+}
+
+#ai-text {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Buttons container */
+#ai-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Buttons styling */
+.ai-btn {
+  padding: 12px 28px;
+  font-size: 18px;
+  background: rgba(255, 255, 255, 0.1);
+
+  /* Fully rounded */
+  border-radius: 1000px;
+  border: none;
+
+  color: white;
+  cursor: pointer;
+
+  opacity: 0;
+  transform: translateY(20px);
+
+  /* Glow effect */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+
+  transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
+}
+
+.ai-btn:hover {
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.9);
+}
+
+.ai-btn.show {
+  opacity: 1;
+  transform: translateY(0px);
+}

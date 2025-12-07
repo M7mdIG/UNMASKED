@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background: black;
+}
+
+/* Back arrow */
+#back-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 32px;
+  color: white;
+  cursor: pointer;
+  z-index: 20;
+  opacity: 0.8;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  font-family: monospace;
+}
+
+#back-btn:hover {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+/* Video wrapper */
+#casino-video-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Fullscreen no-control video */
+#casino-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.92) saturate(1.1);
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>UNMASKED - Global Casino</title>
+
+    <link rel="stylesheet" href="../css/transitions.css" />
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/casino.css" />
+
+    <script src="../js/transitions.js" defer></script>
+  </head>
+
+  <body>
+    <!-- Fade overlay -->
+    <div id="fade-overlay" class="active"></div>
+
+    <!-- Back button -->
+    <div id="back-btn" onclick="fadeTo('../index.html')">◀</div>
+
+    <!-- Video container -->
+    <div id="casino-video-wrapper">
+      <video id="casino-video" autoplay loop muted playsinline>
+        <source src="../assets/casino/casino_loop.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <script>
+      window.onload = () => {
+        document.getElementById("fade-overlay").classList.remove("active");
+      };
+    </script>
+  </body>
+</html>
