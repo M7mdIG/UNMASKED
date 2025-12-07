@@ -482,6 +482,6 @@ function openDashboard() {
 
   // Auto return after 7 seconds
   setTimeout(() => {
-    fadeTo("/unmasked/index.html");
+    fadeTo("../index.html");
   }, 9000);
 }
