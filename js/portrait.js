@@ -298,7 +298,7 @@ function finalAIReveal() {
 
   // After 10 seconds return to lobby
   setTimeout(() => {
-    fadeTo("/unmasked/index.html");
+    fadeTo("../index.html");
   }, 10000);
 }
 
